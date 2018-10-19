@@ -1,24 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { 
+  Component 
+} from 'react';
 import './App.css';
+import Card from './components/Card.js'
 
 class App extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      tarotReading: []
+    }
+  }
+
+  componentDidMount() {
+    this.getCards()
+  }
+
+  getCards = () => {
+    fetch("https://classmate-database-g95.herokuapp.com/")
+      .then(resp => resp.json())
+      .then(resp => this.setState({
+        tarotReading: resp.result
+      }))
+  }
+
   render() {
+    console.log(this.state.tarotReading)
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edits <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          Find your fortune!
+          {this.state.tarotReading.map(card => {
+            return <Card card={card}></Card>
+          })}
         </header>
       </div>
     );
